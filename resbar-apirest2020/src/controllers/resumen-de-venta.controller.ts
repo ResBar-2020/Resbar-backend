@@ -7,15 +7,13 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getFilterSchemaFor,
-  getModelSchemaRef,
-  getWhereSchemaFor,
-  patch,
-  put,
   del,
+  get,
+  getModelSchemaRef,
+  param,
+  patch,
+  post,
+  put,
   requestBody,
 } from '@loopback/rest';
 import {ResumenDeVenta} from '../models';
@@ -24,14 +22,16 @@ import {ResumenDeVentaRepository} from '../repositories';
 export class ResumenDeVentaController {
   constructor(
     @repository(ResumenDeVentaRepository)
-    public resumenDeVentaRepository : ResumenDeVentaRepository,
+    public resumenDeVentaRepository: ResumenDeVentaRepository,
   ) {}
 
   @post('/resumenDeVentas', {
     responses: {
       '200': {
         description: 'ResumenDeVenta model instance',
-        content: {'application/json': {schema: getModelSchemaRef(ResumenDeVenta)}},
+        content: {
+          'application/json': {schema: getModelSchemaRef(ResumenDeVenta)},
+        },
       },
     },
   })
@@ -73,7 +73,9 @@ export class ResumenDeVentaController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(ResumenDeVenta, {includeRelations: true}),
+              items: getModelSchemaRef(ResumenDeVenta, {
+                includeRelations: true,
+              }),
             },
           },
         },
@@ -85,6 +87,52 @@ export class ResumenDeVentaController {
   ): Promise<ResumenDeVenta[]> {
     return this.resumenDeVentaRepository.find(filter);
   }
+  //consumiendo un aggregate para resumir por productos
+  @get('/ResumendeVentaProductos/{fecha1}/{fecha2}', {
+    responses: {
+      '200': {
+        description: 'Resumen de venta Aggregate',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: {'x-ts-type': ResumenDeVenta}},
+          },
+        },
+      },
+    },
+  })
+  async ResumendeVentaProductos(
+    @param.path.date('fecha1') fecha1: Date,
+    @param.path.date('fecha2') fecha2: Date,
+  ): Promise<ResumenDeVenta[]> {
+    const orderCollection = (this.resumenDeVentaRepository.dataSource
+      .connector as any).collection('ResumenDeVenta');
+    return orderCollection
+      .aggregate([
+        {
+          $match: {
+            fecha: {
+              $gte: fecha1,
+              $lte: fecha2,
+            },
+          },
+        },
+        {
+          $unwind: {
+            path: '$productos',
+          },
+        },
+        {
+          $group: {
+            _id: '$productos.nombre',
+            Total: {
+              $sum: '$productos.cantidad',
+            },
+          },
+        },
+      ])
+      .get();
+  }
+  //fin del aggregate
 
   @patch('/resumenDeVentas', {
     responses: {
@@ -122,7 +170,8 @@ export class ResumenDeVentaController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(ResumenDeVenta, {exclude: 'where'}) filter?: FilterExcludingWhere<ResumenDeVenta>
+    @param.filter(ResumenDeVenta, {exclude: 'where'})
+    filter?: FilterExcludingWhere<ResumenDeVenta>,
   ): Promise<ResumenDeVenta> {
     return this.resumenDeVentaRepository.findById(id, filter);
   }

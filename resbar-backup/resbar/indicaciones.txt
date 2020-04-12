@@ -1,0 +1,4 @@
+luego de clonar el repositorio, ejecutas este comando en la consola
+con privilegios
+
+mongorestore --db=resbar --dir="la ruta del backup" 
