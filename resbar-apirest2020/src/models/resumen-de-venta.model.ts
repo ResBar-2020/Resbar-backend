@@ -11,7 +11,7 @@ export class ResumenDeVenta extends Entity {
 
   @property({
     type: 'date',
-    default: '$now',
+    required: true,
   })
   fecha?: string;
 
@@ -28,7 +28,6 @@ export class ResumenDeVenta extends Entity {
   })
   productos: object[];
 
-
   constructor(data?: Partial<ResumenDeVenta>) {
     super(data);
   }
@@ -38,4 +37,5 @@ export interface ResumenDeVentaRelations {
   // describe navigational properties here
 }
 
-export type ResumenDeVentaWithRelations = ResumenDeVenta & ResumenDeVentaRelations;
+export type ResumenDeVentaWithRelations = ResumenDeVenta &
+  ResumenDeVentaRelations;
