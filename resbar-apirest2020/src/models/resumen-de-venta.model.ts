@@ -12,6 +12,9 @@ export class ResumenDeVenta extends Entity {
   @property({
     type: 'date',
     required: true,
+    jsonSchema: {
+      format: 'date',
+    },
   })
   fecha?: string;
 
