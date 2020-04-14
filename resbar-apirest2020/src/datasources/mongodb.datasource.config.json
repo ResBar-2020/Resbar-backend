@@ -1,11 +1,5 @@
 {
   "name": "mongodb",
   "connector": "mongodb",
-  "url": "",
-  "host": "localhost",
-  "port": 27017,
-  "user": "",
-  "password": "",
-  "database": "resbar",
-  "useNewUrlParser": true
+  "url": "mongodb+srv://fernnx2:resbar2020@cluster0-9zsud.mongodb.net/resbar?retryWrites=true&w=majority"
 }
