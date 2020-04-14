@@ -1,0 +1,5 @@
+applications:
+    - name: resbar2020
+      random-route: true
+      memory: 128M
+    
