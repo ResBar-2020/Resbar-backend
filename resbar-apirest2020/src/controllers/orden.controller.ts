@@ -218,7 +218,7 @@ export class OrdenController {
   }
   //fin del aggregate
   //NUEVOS AGREGATE
-  @get('/OrdenPromedio/{fecha1}/{fecha2}', {
+  @get('/OrdenPromedios/{fecha1}/{fecha2}', {
     responses: {
       '200': {
         description: 'Resumen de orden Aggregate',
@@ -230,7 +230,7 @@ export class OrdenController {
       },
     },
   })
-  async OrdenPromedio(
+  async OrdenPromedios(
     @param.path.date('fecha1') fecha1: Date,
     @param.path.date('fecha2') fecha2: Date,
   ): Promise<Orden[]> {
@@ -248,9 +248,18 @@ export class OrdenController {
         },
         {
           $group: {
-            _id: 'PROMEDIO',
-            Total: {
+            _id: 'Datos de Ordenes',
+            Promedio: {
               $avg: '$total',
+            },
+            Count: {
+              $sum: 1,
+            },
+            Minimo: {
+              $min: '$total',
+            },
+            Maximo: {
+              $max: '$total',
             },
           },
         },
