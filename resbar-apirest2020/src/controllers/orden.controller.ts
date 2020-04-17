@@ -7,15 +7,13 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getFilterSchemaFor,
-  getModelSchemaRef,
-  getWhereSchemaFor,
-  patch,
-  put,
   del,
+  get,
+  getModelSchemaRef,
+  param,
+  patch,
+  post,
+  put,
   requestBody,
 } from '@loopback/rest';
 import {Orden} from '../models';
@@ -24,7 +22,7 @@ import {OrdenRepository} from '../repositories';
 export class OrdenController {
   constructor(
     @repository(OrdenRepository)
-    public ordenRepository : OrdenRepository,
+    public ordenRepository: OrdenRepository,
   ) {}
 
   @post('/ordenes', {
@@ -59,9 +57,7 @@ export class OrdenController {
       },
     },
   })
-  async count(
-    @param.where(Orden) where?: Where<Orden>,
-  ): Promise<Count> {
+  async count(@param.where(Orden) where?: Where<Orden>): Promise<Count> {
     return this.ordenRepository.count(where);
   }
 
@@ -80,9 +76,7 @@ export class OrdenController {
       },
     },
   })
-  async find(
-    @param.filter(Orden) filter?: Filter<Orden>,
-  ): Promise<Orden[]> {
+  async find(@param.filter(Orden) filter?: Filter<Orden>): Promise<Orden[]> {
     return this.ordenRepository.find(filter);
   }
 
@@ -122,7 +116,8 @@ export class OrdenController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(Orden, {exclude: 'where'}) filter?: FilterExcludingWhere<Orden>
+    @param.filter(Orden, {exclude: 'where'})
+    filter?: FilterExcludingWhere<Orden>,
   ): Promise<Orden> {
     return this.ordenRepository.findById(id, filter);
   }
@@ -172,4 +167,95 @@ export class OrdenController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.ordenRepository.deleteById(id);
   }
+
+  //NUEVOS AGREGATE
+  @get('/MeseroconMasOrdenes/{fecha1}/{fecha2}', {
+    responses: {
+      '200': {
+        description: 'Resumen de orden Aggregate',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: {'x-ts-type': Orden}},
+          },
+        },
+      },
+    },
+  })
+  async MeseroconMasOrdenes(
+    @param.path.date('fecha1') fecha1: Date,
+    @param.path.date('fecha2') fecha2: Date,
+  ): Promise<Orden[]> {
+    const orderCollection = (this.ordenRepository.dataSource
+      .connector as any).collection('Orden');
+    return orderCollection
+      .aggregate([
+        {
+          $match: {
+            fecha: {
+              $gte: fecha1,
+              $lte: fecha2,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: '$mesero',
+            Total: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $sort: {
+            Total: -1,
+          },
+        },
+        {
+          $limit: 3,
+        },
+      ])
+      .get();
+  }
+  //fin del aggregate
+  //NUEVOS AGREGATE
+  @get('/OrdenPromedio/{fecha1}/{fecha2}', {
+    responses: {
+      '200': {
+        description: 'Resumen de orden Aggregate',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: {'x-ts-type': Orden}},
+          },
+        },
+      },
+    },
+  })
+  async OrdenPromedio(
+    @param.path.date('fecha1') fecha1: Date,
+    @param.path.date('fecha2') fecha2: Date,
+  ): Promise<Orden[]> {
+    const orderCollection = (this.ordenRepository.dataSource
+      .connector as any).collection('Orden');
+    return orderCollection
+      .aggregate([
+        {
+          $match: {
+            fecha: {
+              $gte: fecha1,
+              $lte: fecha2,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: 'PROMEDIO',
+            Total: {
+              $avg: '$total',
+            },
+          },
+        },
+      ])
+      .get();
+  }
+  //fin del aggregate
 }
