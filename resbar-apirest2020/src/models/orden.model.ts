@@ -22,6 +22,18 @@ export class Orden extends Entity {
   mesero: string;
 
   @property({
+    type: 'boolean',
+    default: false,
+  })
+  domicilio: boolean;
+  
+  @property({
+    type: 'number',
+    default: 0,
+  })
+  domicilioEtapa: number;
+
+  @property({
     type: 'string',
     default: '',
   })
