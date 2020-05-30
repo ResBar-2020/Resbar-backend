@@ -129,6 +129,7 @@ export class ResumenDeVentaController {
             },
           },
         },
+		{$sort: {Total: -1}},
       ])
       .get();
   }
