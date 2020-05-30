@@ -27,6 +27,11 @@ export class Producto extends Entity {
   })
   categoria: object;
 
+  @property({
+    type: 'boolean',
+    required: true,
+  })
+  preparado: boolean;
 
   constructor(data?: Partial<Producto>) {
     super(data);
