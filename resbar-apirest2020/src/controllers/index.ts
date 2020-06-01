@@ -6,3 +6,4 @@ export * from './resumen-de-venta.controller';
 export * from './usuarios.controller';
 export * from './bitacora.controller';
 export * from './cliente.controller';
+export * from './parametro.controller';
