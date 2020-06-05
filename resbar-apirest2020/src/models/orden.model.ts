@@ -26,7 +26,7 @@ export class Orden extends Entity {
     default: false,
   })
   domicilio: boolean;
-  
+
   @property({
     type: 'number',
     default: 0,
@@ -62,6 +62,12 @@ export class Orden extends Entity {
     default: '',
   })
   observacion: string;
+
+  @property({
+    type: 'date',
+    default: '$now',
+  })
+  tiempoPreparacion?: string;
 
   @property({
     type: 'array',
