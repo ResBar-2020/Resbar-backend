@@ -66,6 +66,7 @@ export class Orden extends Entity {
   @property({
     type: 'date',
     default: '$now',
+    required: false,
   })
   tiempoPreparacion?: string;
 
