@@ -67,6 +67,8 @@ export class Orden extends Entity {
     type: 'date',
     default: '$now',
     required: false,
+    jsonSchema: {nullable: true},
+
   })
   tiempoPreparacion?: string;
 
