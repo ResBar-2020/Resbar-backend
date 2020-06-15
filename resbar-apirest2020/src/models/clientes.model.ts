@@ -17,13 +17,11 @@ export class Clientes extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
   telefonoCasa: string;
 
   @property({
     type: 'string',
-    required: true,
   })
   celular: string;
 
@@ -34,19 +32,16 @@ export class Clientes extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
   direccion: string;
 
   @property({
     type: 'string',
-    required: true,
   })
   municipio: string;
 
   @property({
     type: 'string',
-    required: true,
   })
   departamento: string;
 
@@ -62,7 +57,6 @@ export class Clientes extends Entity {
 
   @property({
     type: 'date',
-    required: true,
   })
   fechaRegistro: string;
 
