@@ -68,9 +68,22 @@ export class Orden extends Entity {
     default: '$now',
     required: false,
     jsonSchema: {nullable: true},
-
   })
   tiempoPreparacion?: string;
+
+  @property({
+    type: 'number',
+    required: false,
+    default: 0,
+  })
+  propina: number;
+
+  @property({
+    type: 'number',
+    required: false,
+    default: 0,
+  })
+  costoEnvio: number;
 
   @property({
     type: 'array',
