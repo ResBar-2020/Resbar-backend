@@ -25,6 +25,20 @@ export class ResumenDeVenta extends Entity {
   total: number;
 
   @property({
+    type: 'number',
+    required: false,
+    default: 0,
+  })
+  propina: number;
+
+  @property({
+    type: 'number',
+    required: false,
+    default: 0,
+  })
+  costoEnvio: number;
+
+  @property({
     type: 'array',
     itemType: 'object',
     required: true,
