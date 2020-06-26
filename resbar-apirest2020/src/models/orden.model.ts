@@ -40,10 +40,11 @@ export class Orden extends Entity {
   mesa: string;
 
   @property({
-    type: 'string',
+    type: 'array',
+    itemType:'object',
     default: '',
   })
-  cliente: string;
+  cliente: object[];
 
   @property({
     type: 'string',
