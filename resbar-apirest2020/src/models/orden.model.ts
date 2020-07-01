@@ -22,16 +22,29 @@ export class Orden extends Entity {
   mesero: string;
 
   @property({
+    type: 'boolean',
+    default: false,
+  })
+  domicilio: boolean;
+
+  @property({
+    type: 'number',
+    default: 0,
+  })
+  domicilioEtapa: number;
+
+  @property({
     type: 'string',
     default: '',
   })
   mesa: string;
 
   @property({
-    type: 'string',
+    type: 'object',
+    itemType:'object',
     default: '',
   })
-  cliente: string;
+  cliente: object[];
 
   @property({
     type: 'string',
@@ -50,6 +63,28 @@ export class Orden extends Entity {
     default: '',
   })
   observacion: string;
+
+  @property({
+    type: 'date',
+    default: '$now',
+    required: false,
+    jsonSchema: {nullable: true},
+  })
+  tiempoPreparacion?: string;
+
+  @property({
+    type: 'number',
+    required: false,
+    default: 0,
+  })
+  propina: number;
+
+  @property({
+    type: 'number',
+    required: false,
+    default: 0,
+  })
+  costoEnvio: number;
 
   @property({
     type: 'array',
